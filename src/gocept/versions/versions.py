@@ -36,6 +36,7 @@ class Versions(object):
         print "Setting versions from ", self.spec
         versions = {}
         parser = ConfigParser.RawConfigParser()
+        parser.optionxform = lambda s: s
         parser.readfp(pkg_resources.resource_stream(
             self.versions_package, self.versions_path))
         versions = dict(parser.items('versions'))

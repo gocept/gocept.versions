@@ -23,7 +23,7 @@ Create a package to include versions information:
 >>> write('customversions', 'versions.cfg',
 ... """
 ... [versions]
-... foo-package = 17.5
+... Foo-Package = 17.5
 ... """)
 >>> write('MANIFEST.in',
 ... """
@@ -58,7 +58,7 @@ package which contains the versions:
 ...
 ... [install-foo]
 ... recipe = zc.recipe.egg
-... eggs = foo-package
+... eggs = Foo-Package
 ...
 ... """ % os.path.join(sample_buildout, 'customversions', 'dist'))
 
@@ -70,14 +70,14 @@ install_dir /sample-buildout/eggs/...
 Got customversions 0.1.
 Setting versions from  customversions:versions.cfg
 Installing install-foo.
-Getting distribution for 'foo-package==17.5'.
+Getting distribution for 'Foo-Package==17.5'.
 zip_safe flag not set; analyzing archive contents...
 Couldn't find index page for 'zc.recipe.egg' (maybe misspelled?)
-Couldn't find index page for 'foo-package' (maybe misspelled?)
+Couldn't find index page for 'Foo-Package' (maybe misspelled?)
 While:
   Installing install-foo.
-  Getting distribution for 'foo-package==17.5'.
-Error: Couldn't find a distribution for 'foo-package==17.5'.
+  Getting distribution for 'Foo-Package==17.5'.
+Error: Couldn't find a distribution for 'Foo-Package==17.5'.
 
 
 It is also possible to pin the version of the version package:
@@ -96,7 +96,7 @@ It is also possible to pin the version of the version package:
 ...
 ... [install-foo]
 ... recipe = zc.recipe.egg
-... eggs = foo-package
+... eggs = Foo-Package
 ...
 ... """ % os.path.join(sample_buildout, 'customversions', 'dist'))
 >>> print system(buildout),
@@ -116,7 +116,7 @@ Change the version in the versions package:
 >>> write('customversions', 'customversions', 'versions.cfg',
 ... """
 ... [versions]
-... foo-package = 18.5
+... Foo-Package = 18.5
 ... """)
 
 
@@ -134,7 +134,7 @@ still using the old versions package:
 ...
 ... [install-foo]
 ... recipe = zc.recipe.egg
-... eggs = foo-package
+... eggs = Foo-Package
 ...
 ... """ % os.path.join(sample_buildout, 'customversions', 'dist'))
 >>> print system(buildout),  # doctest: +ELLIPSIS
@@ -142,13 +142,13 @@ Setting versions from  customversions:versions.cfg
 Develop: '/sample-buildout/customversions'
 install_dir /sample-buildout/develop-eggs/...
 Installing install-foo.
-Getting distribution for 'foo-package==17.5'.
+Getting distribution for 'Foo-Package==17.5'.
 Couldn't find index page for 'zc.recipe.egg' (maybe misspelled?)
-Couldn't find index page for 'foo-package' (maybe misspelled?)
+Couldn't find index page for 'Foo-Package' (maybe misspelled?)
 While:
   Installing install-foo.
-  Getting distribution for 'foo-package==17.5'.
-Error: Couldn't find a distribution for 'foo-package==17.5'.
+  Getting distribution for 'Foo-Package==17.5'.
+Error: Couldn't find a distribution for 'Foo-Package==17.5'.
 
 In the second run it is picking up the new version and using the customversions
 package as development package:
@@ -158,10 +158,10 @@ Setting versions from  customversions:versions.cfg
 Develop: '/sample-buildout/customversions'
 install_dir /sample-buildout/develop-eggs/...
 Installing install-foo.
-Getting distribution for 'foo-package==18.5'.
+Getting distribution for 'Foo-Package==18.5'.
 Couldn't find index page for 'zc.recipe.egg' (maybe misspelled?)
-Couldn't find index page for 'foo-package' (maybe misspelled?)
+Couldn't find index page for 'Foo-Package' (maybe misspelled?)
 While:
   Installing install-foo.
-  Getting distribution for 'foo-package==18.5'.
-Error: Couldn't find a distribution for 'foo-package==18.5'.
+  Getting distribution for 'Foo-Package==18.5'.
+Error: Couldn't find a distribution for 'Foo-Package==18.5'.
