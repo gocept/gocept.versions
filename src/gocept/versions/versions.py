@@ -3,6 +3,7 @@
 
 import ConfigParser
 import pkg_resources
+import sys
 import zc.buildout
 import zc.buildout.easy_install
 
@@ -15,24 +16,31 @@ class Versions(object):
             self.versions = self.buildout['buildout']['version'] = 'versions'
         self.spec = self.buildout['buildout']['versions-specification']
         self.versions_package, self.versions_path = self.spec.split(':', 1)
+        self.develop = self.buildout['buildout'].get(
+            'versions-specification-develop')
 
     def __call__(self):
         self._install_package()
         self._install_versions()
 
     def _install_package(self):
-        path = [self.buildout['buildout']['develop-eggs-directory']]
         # XXX offline mode
+        path = self.buildout['buildout']['develop-eggs-directory']
         requirement = pkg_resources.Requirement.parse(self.versions_package)
         if requirement not in pkg_resources.working_set:
+            if self.develop:
+                self._old_path = sys.path[:]
+                sys.path.insert(0, path)
+                zc.buildout.easy_install.develop(self.develop, path)
             dest = self.buildout['buildout']['eggs-directory']
             zc.buildout.easy_install.install(
-                [self.versions_package], dest, path=path,
+                [self.versions_package], dest, path=[path],
                 working_set=pkg_resources.working_set,
-                links = self.buildout['buildout'].get('find-links', '').split(),
-                index = self.buildout['buildout'].get('index'),
+                links=self.buildout['buildout'].get(
+                    'find-links', '').split(),
+                index=self.buildout['buildout'].get('index'),
                 newest=self.buildout.newest,
-                allow_hosts=self.buildout._allow_hosts)
+                    allow_hosts=self.buildout._allow_hosts)
 
     def _install_versions(self):
         versions = {}

@@ -6,6 +6,8 @@ Changes
 
 - Package names are case sensitive now.
 
+- Allow versions package to be a develop egg.
+
 
 0.1 (2010-08-13)
 ----------------

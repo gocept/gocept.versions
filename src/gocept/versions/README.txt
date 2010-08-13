@@ -165,3 +165,67 @@ While:
   Installing install-foo.
   Getting distribution for 'Foo-Package==18.5'.
 Error: Couldn't find a distribution for 'Foo-Package==18.5'.
+
+This is a problem when a develop egg should be used in the initial run. To
+demonstrate this, clean up a bit first:
+
+
+>>> write('buildout.cfg',
+... """
+... [buildout]
+... parts =
+... """)
+>>> _ = system(buildout), 
+>>> remove('eggs', 'customversions-0.1-py2.7.egg')  # XXX
+>>> remove('develop-eggs', 'customversions.egg-link')
+
+Create a buildout which uses customversions as develop egg:
+
+>>> write('buildout.cfg',
+... """
+... [buildout]
+... extensions = gocept.versions
+... develop = ${buildout:directory}/customversions
+... versions-specification = customversions:versions.cfg
+... parts = install-foo
+...
+... [install-foo]
+... recipe = zc.recipe.egg
+... eggs = Foo-Package
+...
+... """)
+>>> print system(buildout),
+Getting distribution for 'customversions'.
+Couldn't find index page for 'customversions' (maybe misspelled?)
+While:
+  Installing.
+  Loading extensions.
+  Getting distribution for 'customversions'.
+Error: Couldn't find a distribution for 'customversions'.
+
+
+To allow this, special treat is required:
+
+>>> write('buildout.cfg',
+... """
+... [buildout]
+... extensions = gocept.versions
+... versions-specification = customversions:versions.cfg
+... versions-specification-develop = ${buildout:directory}/customversions
+... parts = install-foo
+...
+... [install-foo]
+... recipe = zc.recipe.egg
+... eggs = Foo-Package
+...
+... """)
+>>> print system(buildout),  # doctest: +ELLIPSIS +REPORT_NDIFF
+install_dir /sample-buildout/develop-eggs/...
+Setting versions from customversions:versions.cfg /sample-buildout/customversions/customversions/versions.cfg)
+Installing install-foo.
+Getting distribution for 'Foo-Package==18.5'.
+Couldn't find index page for 'Foo-Package' (maybe misspelled?)
+While:
+  Installing install-foo.
+  Getting distribution for 'Foo-Package==18.5'.
+Error: Couldn't find a distribution for 'Foo-Package==18.5'.
