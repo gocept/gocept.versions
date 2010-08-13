@@ -23,14 +23,16 @@ class Versions(object):
     def _install_package(self):
         path = [self.buildout['buildout']['develop-eggs-directory']]
         # XXX offline mode
-        dest = self.buildout['buildout']['eggs-directory']
-        zc.buildout.easy_install.install(
-            [self.versions_package], dest, path=path,
-            working_set=pkg_resources.working_set,
-            links = self.buildout['buildout'].get('find-links', '').split(),
-            index = self.buildout['buildout'].get('index'),
-            newest=self.buildout.newest,
-            allow_hosts=self.buildout._allow_hosts)
+        requirement = pkg_resources.Requirement.parse(self.versions_package)
+        if requirement not in pkg_resources.working_set:
+            dest = self.buildout['buildout']['eggs-directory']
+            zc.buildout.easy_install.install(
+                [self.versions_package], dest, path=path,
+                working_set=pkg_resources.working_set,
+                links = self.buildout['buildout'].get('find-links', '').split(),
+                index = self.buildout['buildout'].get('index'),
+                newest=self.buildout.newest,
+                allow_hosts=self.buildout._allow_hosts)
 
     def _install_versions(self):
         versions = {}
