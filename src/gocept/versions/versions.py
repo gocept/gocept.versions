@@ -33,12 +33,13 @@ class Versions(object):
             allow_hosts=self.buildout._allow_hosts)
 
     def _install_versions(self):
-        print "Setting versions from ", self.spec
         versions = {}
         parser = ConfigParser.RawConfigParser()
         parser.optionxform = lambda s: s
-        parser.readfp(pkg_resources.resource_stream(
-            self.versions_package, self.versions_path))
+        filename = pkg_resources.resource_filename(
+            self.versions_package, self.versions_path)
+        print "Setting versions from %s (%s)" % (self.spec, filename)
+        parser.read(filename)
         versions = dict(parser.items('versions'))
         zc.buildout.easy_install.default_versions(versions)
 

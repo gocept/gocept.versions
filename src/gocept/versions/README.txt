@@ -68,7 +68,7 @@ The extension pins the version to 17.5:
 Getting distribution for 'customversions'.
 install_dir /sample-buildout/eggs/...
 Got customversions 0.1.
-Setting versions from  customversions:versions.cfg
+Setting versions from customversions:versions.cfg /sample-buildout/eggs/customversions-0.1-py...egg/customversions/versions.cfg)
 Installing install-foo.
 Getting distribution for 'Foo-Package==17.5'.
 zip_safe flag not set; analyzing archive contents...
@@ -138,7 +138,7 @@ still using the old versions package:
 ...
 ... """ % os.path.join(sample_buildout, 'customversions', 'dist'))
 >>> print system(buildout),  # doctest: +ELLIPSIS
-Setting versions from  customversions:versions.cfg
+Setting versions from customversions:versions.cfg /sample-buildout/eggs/customversions-0.1-py...egg/customversions/versions.cfg)
 Develop: '/sample-buildout/customversions'
 install_dir /sample-buildout/develop-eggs/...
 Installing install-foo.
@@ -154,7 +154,7 @@ In the second run it is picking up the new version and using the customversions
 package as development package:
 
 >>> print system(buildout),  # doctest: +ELLIPSIS
-Setting versions from  customversions:versions.cfg
+Setting versions from customversions:versions.cfg /sample-buildout/customversions/customversions/versions.cfg)
 Develop: '/sample-buildout/customversions'
 install_dir /sample-buildout/develop-eggs/...
 Installing install-foo.
