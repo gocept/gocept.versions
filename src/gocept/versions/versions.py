@@ -1,10 +1,11 @@
 # Copyright (c) 2010 gocept gmbh & co. kg
 # See also LICENSE.txt
 
-import ConfigParser
+import os.path
 import pkg_resources
 import sys
 import zc.buildout
+import zc.buildout.buildout
 import zc.buildout.easy_install
 
 class Versions(object):
@@ -44,14 +45,17 @@ class Versions(object):
 
     def _install_versions(self):
         versions = {}
-        parser = ConfigParser.RawConfigParser()
-        parser.optionxform = lambda s: s
+        # XXX we're using an internal function here
         filename = pkg_resources.resource_filename(
             self.versions_package, self.versions_path)
+        config = zc.buildout.buildout._open(
+            os.path.dirname(filename), filename, [],
+            self.buildout._annotated['buildout'].copy(), {})
         print "Setting versions from %s (%s)" % (self.spec, filename)
-        parser.read(filename)
-        versions = dict(parser.items('versions'))
+        config = zc.buildout.buildout._unannotate(config)
+        versions = config['versions']
         zc.buildout.easy_install.default_versions(versions)
+
 
 def extension(buildout):
     Versions(buildout)()

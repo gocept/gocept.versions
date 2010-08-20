@@ -4,7 +4,7 @@ Changes
 0.3 (unreleased)
 ----------------
 
-- Nothing changed yet.
+- Allow version specification files in packages to extend others.
 
 
 0.2 (2010-08-13)

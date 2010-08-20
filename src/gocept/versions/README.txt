@@ -2,6 +2,10 @@
 gocept.versions
 ===============
 
+Basic usage
+===========
+
+
 Create a package to include versions information:
 
 >>> import os
@@ -166,8 +170,9 @@ While:
   Getting distribution for 'Foo-Package==18.5'.
 Error: Couldn't find a distribution for 'Foo-Package==18.5'.
 
-This is a problem when a develop egg should be used in the initial run. To
-demonstrate this, clean up a bit first:
+That the develop versions egg is picked up too late is problem when a develop
+egg should be used in the initial run. To demonstrate this, clean up a bit
+first:
 
 
 >>> write('buildout.cfg',
@@ -194,6 +199,9 @@ Create a buildout which uses customversions as develop egg:
 ... eggs = Foo-Package
 ...
 ... """)
+
+Buildout fails now, as it cannot load the customversions egg:
+
 >>> print system(buildout),
 Getting distribution for 'customversions'.
 Couldn't find index page for 'customversions' (maybe misspelled?)
@@ -204,7 +212,7 @@ While:
 Error: Couldn't find a distribution for 'customversions'.
 
 
-To allow this, special treat is required:
+To allow using the versions as develop egg, special treat is required:
 
 >>> write('buildout.cfg',
 ... """
@@ -229,3 +237,38 @@ While:
   Installing install-foo.
   Getting distribution for 'Foo-Package==18.5'.
 Error: Couldn't find a distribution for 'Foo-Package==18.5'.
+
+
+Recursive versions
+==================
+
+The configuration file in the custom versions package is loaded like a normal
+buildout configuration: extends is honoured:
+
+>>> write('customversions', 'customversions', 'versions.cfg',
+... """
+... [buildout]
+... extends = otherversions.cfg
+... """)
+>>> write('customversions', 'customversions', 'otherversions.cfg',
+... """
+... [versions]
+... Foo-Package = 19.5
+... """)
+>>> print system(buildout),  # doctest: +ELLIPSIS +REPORT_NDIFF
+install_dir /sample-buildout/develop-eggs/...
+Setting versions from customversions:versions.cfg /sample-buildout/customversions/customversions/versions.cfg)
+Installing install-foo.
+Getting distribution for 'Foo-Package==19.5'.
+Couldn't find index page for 'Foo-Package' (maybe misspelled?)
+While:
+  Installing install-foo.
+  Getting distribution for 'Foo-Package==19.5'.
+Error: Couldn't find a distribution for 'Foo-Package==19.5'.
+
+Specifying the versions section
+===============================
+
+Not implemented, yet. Currently the versions section must be named
+``[versions]``.
+
