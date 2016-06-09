@@ -1,21 +1,18 @@
-# Copyright (c) 2010 gocept gmbh & co. kg
-# See also LICENSE.txt
-
 from setuptools import setup, find_packages
 
 
 setup(
     name='gocept.versions',
     version='0.3dev',
-    author='gocept',
+    author='gocept gmbh & co. kg',
     author_email='mail@gocept.com',
-    url='',
-    description="""\
-""",
+    url='https://bitbucket.org/gocept/gocept.versions',
+    description='Buildout version managment extension',
     long_description=(
-        open('README.txt').read()
-        + '\n\n'
-        + open('CHANGES.txt').read()),
+        open('README.txt').read() +
+        '\n\n' +
+        open('CHANGES.txt').read()),
+
     packages=find_packages('src'),
     package_dir={'': 'src'},
     include_package_data=True,

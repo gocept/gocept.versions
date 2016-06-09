@@ -4,6 +4,8 @@ Changes
 0.3 (unreleased)
 ----------------
 
+- Migrate repository to Bitbucket.
+
 - Allow version specification files in packages to extend others.
 
 
